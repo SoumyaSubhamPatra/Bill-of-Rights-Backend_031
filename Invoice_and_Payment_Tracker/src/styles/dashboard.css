@@ -1,0 +1,35 @@
+.dashboard {
+  padding: 20px;
+}
+
+.dashboard h2 {
+  margin-bottom: 20px;
+}
+
+.dashboard-cards {
+  display: flex;
+  justify-content: space-between;
+}
+
+.card {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  width: 30%;
+  text-align: center;
+}
+
+.card h3 {
+  margin-bottom: 10px;
+}
+
+.card p {
+  font-size: 1.5rem;
+  color: #333;
+}
+
+.chart-container {
+  margin-top: 20px;
+  height: 400px; /* Adjust height as needed */
+}
