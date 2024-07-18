@@ -1,5 +1,6 @@
 // src/pages/InvoicePage.tsx
-import React, { useEffect } from 'react';
+
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../store';
 import { fetchInvoicesAsync, createInvoiceAsync, updateInvoiceAsync, deleteInvoiceAsync } from '../features/invoices/invoicesSlice';
@@ -13,6 +14,8 @@ const InvoicePage: React.FC = () => {
   const status = useSelector((state: RootState) => state.invoices.status);
   const error = useSelector((state: RootState) => state.invoices.error);
 
+  const [editingIndex, setEditingIndex] = useState<number | null>(null);
+
   useEffect(() => {
     dispatch(fetchInvoicesAsync());
   }, [dispatch]);
@@ -22,11 +25,23 @@ const InvoicePage: React.FC = () => {
   };
 
   const handleUpdate = (invoice: any) => {
-    dispatch(updateInvoiceAsync(invoice));
+    if (editingIndex !== null) {
+      const invoiceToUpdate = { ...invoices[editingIndex], ...invoice }; // Ensure id is preserved
+      dispatch(updateInvoiceAsync(invoiceToUpdate));
+      setEditingIndex(null); // Clear editing state after update
+    }
   };
 
   const handleDelete = (invoiceId: string) => {
     dispatch(deleteInvoiceAsync(invoiceId));
+  };
+
+  const handleEdit = (invoice: any, index: number) => {
+    setEditingIndex(index);
+  };
+
+  const handleCancelEdit = () => {
+    setEditingIndex(null);
   };
 
   return (
@@ -40,8 +55,17 @@ const InvoicePage: React.FC = () => {
             {error}
           </Alert>
         )}
-        <InvoiceForm onSubmit={handleCreate} />
-        <InvoiceList invoices={invoices} onUpdate={handleUpdate} onDelete={handleDelete} />
+        <InvoiceForm
+          onSubmit={editingIndex !== null ? handleUpdate : handleCreate}
+          invoice={editingIndex !== null ? invoices[editingIndex] : undefined}
+          onCancelEdit={handleCancelEdit}
+        />
+        <InvoiceList
+          invoices={invoices}
+          onUpdate={handleUpdate}
+          onDelete={handleDelete}
+          onEdit={handleEdit}
+        />
       </VStack>
     </Box>
   );
