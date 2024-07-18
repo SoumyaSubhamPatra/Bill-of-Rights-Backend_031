@@ -1,31 +1,54 @@
 // src/components/InvoiceForm.tsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, Button, FormControl, FormLabel, Input, Textarea, VStack, HStack, Heading } from '@chakra-ui/react';
 
 interface InvoiceFormProps {
   onSubmit: (invoice: any) => void;
-  invoice?: any;
+  invoice?: any; // Optional invoice prop for editing
+  onCancelEdit?: () => void; // Optional function to cancel editing
 }
 
-const InvoiceForm: React.FC<InvoiceFormProps> = ({ onSubmit, invoice }) => {
-  const [formState, setFormState] = useState(invoice || {
-    invoiceNumber: '',
-    date: '',
-    dueDate: '',
-    customerId: '',
-    items: [{ description: '', quantity: 1, price: 0, tax: 0 }],
-    totalAmount: 0,
-    currency: 'USD',
-    status: 'unpaid',
-    isRecurring: false,
-    recurringInterval: null,
+const InvoiceForm: React.FC<InvoiceFormProps> = ({ onSubmit, invoice, onCancelEdit }) => {
+  const [formState, setFormState] = useState({
+    invoiceNumber: invoice?.invoiceNumber || '',
+    date: invoice?.date || '',
+    dueDate: invoice?.dueDate || '',
+    customerId: invoice?.customerId || '',
+    items: invoice?.items || [{ description: '', quantity: 1, price: 0, tax: 0 }],
+    totalAmount: invoice?.totalAmount || 0,
+    currency: invoice?.currency || 'USD',
+    status: invoice?.status || 'unpaid',
+    isRecurring: invoice?.isRecurring || false,
+    recurringInterval: invoice?.recurringInterval || null,
   });
+
+  useEffect(() => {
+    calculateTotalAmount(); // Recalculate total amount whenever items change
+  }, [formState.items]);
+
+  useEffect(() => {
+    // Update formState when invoice prop changes (for editing)
+    if (invoice) {
+      setFormState({
+        invoiceNumber: invoice.invoiceNumber || '',
+        date: invoice.date || '',
+        dueDate: invoice.dueDate || '',
+        customerId: invoice.customerId || '',
+        items: invoice.items || [{ description: '', quantity: 1, price: 0, tax: 0 }],
+        totalAmount: invoice.totalAmount || 0,
+        currency: invoice.currency || 'USD',
+        status: invoice.status || 'unpaid',
+        isRecurring: invoice.isRecurring || false,
+        recurringInterval: invoice.recurringInterval || null,
+      });
+    }
+  }, [invoice]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, index?: number) => {
     const { name, value } = e.target;
     if (index !== undefined) {
       const items = [...formState.items];
-      items[index] = { ...items[index], [name]: value };
+      items[index] = { ...items[index], [name]: name === 'description' ? value : Number(value) };
       setFormState({ ...formState, items });
     } else {
       setFormState({ ...formState, [name]: value });
@@ -36,14 +59,22 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ onSubmit, invoice }) => {
     setFormState({ ...formState, items: [...formState.items, { description: '', quantity: 1, price: 0, tax: 0 }] });
   };
 
+  const calculateTotalAmount = () => {
+    const total = formState.items.reduce((acc, item) => {
+      const itemTotal = item.quantity * item.price + item.tax;
+      return acc + itemTotal;
+    }, 0);
+    setFormState({ ...formState, totalAmount: total });
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit(formState);
+    onSubmit(formState); // Submit the form state to parent component for processing
   };
 
   return (
     <Box as="form" onSubmit={handleSubmit} mb={8} p={6} borderWidth="1px" borderRadius="lg" boxShadow="md">
-      <Heading as="h3" size="lg" mb={6} color="brand.700">Create Invoice</Heading>
+      <Heading as="h3" size="lg" mb={6} color="brand.700">{invoice ? 'Edit Invoice' : 'Create Invoice'}</Heading>
       <VStack spacing={4}>
         <FormControl isRequired>
           <FormLabel>Invoice Number</FormLabel>
@@ -90,9 +121,12 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ onSubmit, invoice }) => {
         <Button onClick={handleAddItem} colorScheme="blue" variant="outline" w="full">Add Item</Button>
         <FormControl isRequired>
           <FormLabel>Total Amount</FormLabel>
-          <Input type="number" name="totalAmount" value={formState.totalAmount} onChange={handleChange} />
+          <Input type="number" name="totalAmount" value={formState.totalAmount.toFixed(2)} readOnly />
         </FormControl>
-        <Button type="submit" colorScheme="blue" w="full">Submit</Button>
+        {onCancelEdit && (
+          <Button onClick={onCancelEdit} colorScheme="gray" w="full" variant="outline">Cancel</Button>
+        )}
+        <Button type="submit" colorScheme="blue" w="full">{invoice ? 'Update' : 'Submit'}</Button>
       </VStack>
     </Box>
   );

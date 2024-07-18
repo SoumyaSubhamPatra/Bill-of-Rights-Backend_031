@@ -1,3 +1,5 @@
+// src/api/invoicesAPI.ts
+
 import axios from 'axios';
 
 const API_URL = 'https://api-payment-e5gt.onrender.com';
@@ -11,6 +13,9 @@ export const createInvoice = (invoice: any) => {
 };
 
 export const updateInvoice = (invoice: any) => {
+  if (!invoice.id) {
+    throw new Error('Invoice ID is required for updating an invoice.');
+  }
   return axios.put(`${API_URL}/invoices/${invoice.id}`, invoice);
 };
 

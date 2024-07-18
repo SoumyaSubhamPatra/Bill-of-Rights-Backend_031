@@ -8,6 +8,8 @@ import Customer from "./components/Customer";
 import SystemUsers from "./components/SystemUsers";
 import "./styles/styles.css";
 import InvoiceForm from "./components/InvoiceForm";
+import InvoicePage from "./pages/InvoicePage";
+
 
 const App: React.FC = () => {
   const [darkMode, setDarkMode] = useState(false);
@@ -26,6 +28,7 @@ const App: React.FC = () => {
           <Routes>
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/invoice" element={<InvoiceForm />} />
+            <Route path="/" element={<InvoicePage />} />
             <Route path="/product" element={<Product />} />
             <Route path="/customer" element={<Customer />} />
             <Route path="/system-users" element={<SystemUsers />} />

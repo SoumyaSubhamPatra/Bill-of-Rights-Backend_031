@@ -12,6 +12,7 @@ interface Invoice {
   total: number;
 }
 
+
 interface InvoicesState {
   invoices: Invoice[];
   status: 'idle' | 'loading' | 'succeeded' | 'failed';
