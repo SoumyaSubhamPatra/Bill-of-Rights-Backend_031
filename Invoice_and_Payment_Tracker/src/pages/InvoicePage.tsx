@@ -1,12 +1,24 @@
 // src/pages/InvoicePage.tsx
 
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../store';
-import { fetchInvoicesAsync, createInvoiceAsync, updateInvoiceAsync, deleteInvoiceAsync } from '../features/invoices/invoicesSlice';
-import InvoiceForm from '../components/InvoiceForm';
-import InvoiceList from '../components/InvoiceList';
-import { Box, Heading, Spinner, Alert, AlertIcon, VStack } from '@chakra-ui/react';
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../store";
+import {
+  fetchInvoicesAsync,
+  createInvoiceAsync,
+  updateInvoiceAsync,
+  deleteInvoiceAsync,
+} from "../features/invoices/invoicesSlice";
+import InvoiceForm from "../components/InvoiceForm";
+import InvoiceList from "../components/InvoiceList";
+import {
+  Box,
+  Heading,
+  Spinner,
+  Alert,
+  AlertIcon,
+  VStack,
+} from "@chakra-ui/react";
 
 const InvoicePage: React.FC = () => {
   const dispatch = useDispatch();
@@ -47,9 +59,11 @@ const InvoicePage: React.FC = () => {
   return (
     <Box p={8}>
       <VStack spacing={8}>
-        <Heading as="h1" size="2xl" color="brand.700">Invoices</Heading>
-        {status === 'loading' && <Spinner size="xl" />}
-        {status === 'failed' && (
+        <Heading as="h1" size="2xl" color="brand.700">
+          Invoices
+        </Heading>
+        {status === "loading" && <Spinner size="xl" />}
+        {status === "failed" && (
           <Alert status="error">
             <AlertIcon />
             {error}
