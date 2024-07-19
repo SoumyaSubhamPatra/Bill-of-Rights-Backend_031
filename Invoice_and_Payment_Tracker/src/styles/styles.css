@@ -18,17 +18,34 @@ body.dark-theme {
 }
 
 /* Navbar styles */
+/* styles.css */
+:root {
+  --navbar-bg: #282c34;
+  --navbar-text: #ffffff;
+  --navbar-hover: #61dafb;
+}
+
 .navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #333;
-  color: #fff;
   padding: 10px 20px;
+  background-color: var(--navbar-bg);
+  color: var(--navbar-text);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .navbar-logo {
+  display: flex;
+  align-items: center;
   font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--navbar-text);
+}
+
+.logo-image {
+  height: 40px; /* Adjust based on your logo size */
+  margin-right: 10px; /* Space between logo and text */
 }
 
 .navbar-actions {
@@ -36,22 +53,28 @@ body.dark-theme {
   align-items: center;
 }
 
-.login-link {
-  color: #fff;
-  text-decoration: none;
-  margin-left: 20px; /* Adjust margin as needed */
-}
-
 .theme-toggle {
-  display: flex;
-  align-items: center;
   cursor: pointer;
-  margin-left: 20px; /* Adjust margin as needed */
+  margin-right: 20px; /* Adjust based on your preference */
+  color: var(--navbar-text);
 }
 
 .toggle-icon {
   font-size: 1.5rem;
-  margin-left: 5px;
+}
+
+.login-link {
+  text-decoration: none;
+  color: var(--navbar-text);
+  font-size: 1rem;
+  padding: 5px 10px;
+  border-radius: 5px;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.login-link:hover {
+  background-color: var(--navbar-hover);
+  color: var(--navbar-bg);
 }
 
 /* Sidebar styles */

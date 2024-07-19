@@ -1,6 +1,7 @@
 import React from "react";
 import { FaSun, FaMoon } from "react-icons/fa";
-// import "./style.css";
+import logo from '../assets/Logos.png'; // Make sure to replace this with the actual path to your logo image
+import "../styles/styles.css";
 
 interface NavbarProps {
   toggleTheme: () => void;
@@ -10,7 +11,10 @@ interface NavbarProps {
 const Navbar: React.FC<NavbarProps> = ({ toggleTheme, darkMode }) => {
   return (
     <nav className="navbar">
-      <div className="navbar-logo">MyApp</div>
+      <div className="navbar-logo">
+        <img src={logo} alt="Payment Tracker Logo" className="logo-image" />
+        <span>Payment Tracker</span>
+      </div>
       <div className="navbar-actions">
         <div className="theme-toggle" onClick={toggleTheme}>
           {darkMode ? (
