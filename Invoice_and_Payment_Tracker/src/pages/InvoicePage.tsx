@@ -1,5 +1,3 @@
-// src/pages/InvoicePage.tsx
-
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store";
@@ -18,6 +16,7 @@ import {
   Alert,
   AlertIcon,
   VStack,
+  useColorModeValue,
 } from "@chakra-ui/react";
 
 const InvoicePage: React.FC = () => {
@@ -56,10 +55,19 @@ const InvoicePage: React.FC = () => {
     setEditingIndex(null);
   };
 
+  const boxBgColor = useColorModeValue("gray.50", "gray.700");
+  const headingColor = useColorModeValue("brand.700", "brand.300");
+
   return (
-    <Box p={8}>
-      <VStack spacing={8}>
-        <Heading as="h1" size="2xl" color="brand.700">
+    <Box
+      p={{ base: 4, md: 8 }}
+      mx="auto"
+      maxW={{ base: "100%", md: "1000px" }}
+      w="full"
+      bg={boxBgColor}
+    >
+      <VStack spacing={{ base: 4, md: 8 }}>
+        <Heading as="h1" size="2xl" color={headingColor}>
           Invoices
         </Heading>
         {status === "loading" && <Spinner size="xl" />}

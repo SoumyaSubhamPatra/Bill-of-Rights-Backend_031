@@ -18,6 +18,11 @@
   filter: drop-shadow(0 0 2em #61dafbaa);
 }
 
+.container {
+  max-width: 1200px; /* Set a max-width based on your design */
+  margin: 0 auto; /* Center the container horizontally */
+  padding: 0 20px; /* Optional: add padding for some space on the sides */
+}
 @keyframes logo-spin {
   from {
     transform: rotate(0deg);
