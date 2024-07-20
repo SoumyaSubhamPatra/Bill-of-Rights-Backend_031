@@ -1,7 +1,9 @@
-import React from "react";
-import { FaSun, FaMoon } from "react-icons/fa";
+// src/components/Navbar.tsx
+
+import React from 'react';
+import { FaSun, FaMoon } from 'react-icons/fa';
 import logo from '../assets/Logos.png'; // Make sure to replace this with the actual path to your logo image
-import "../styles/styles.css";
+import '../styles/styles.css';
 
 interface NavbarProps {
   toggleTheme: () => void;

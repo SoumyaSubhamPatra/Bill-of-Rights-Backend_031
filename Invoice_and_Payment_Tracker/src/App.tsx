@@ -10,7 +10,8 @@ import SystemUsers from "./components/SystemUsers";
 import LoginForm from "./components/LoginForm";
 import SignUpForm from "./components/SignUpForm";
 import "./styles/styles.css";
-import InvoiceForm from "./components/InvoiceForm";
+import "./App.css"
+// import InvoiceForm from "./components/InvoiceForm";
 import InvoicePage from "./pages/InvoicePage";
 import {
   Modal,
@@ -21,6 +22,7 @@ import {
   ModalBody,
   ModalCloseButton,
 } from "@chakra-ui/react";
+import SendInvoice from "./components/SendInvoice";
 
 const App = () => {
   const [darkMode, setDarkMode] = useState(false);
@@ -52,7 +54,8 @@ const App = () => {
   };
 
   return (
-    <ChakraProvider>
+    <div className="container">
+      <ChakraProvider>
       <Router>
         <div className={darkMode ? "dark-theme" : ""}>
           {isAuthenticated ? (
@@ -62,8 +65,9 @@ const App = () => {
               <div className="content">
                 <Routes>
                   <Route path="/dashboard" element={<Dashboard />} />
-                  <Route path="/invoice" element={<InvoiceForm />} />
-                  <Route path="/" element={<InvoicePage />} />
+                  <Route path="/invoice" element={<InvoicePage />} />
+                  <Route path="/invoicepage" element={<InvoicePage />} />
+                  <Route path="send-invoice" element={<SendInvoice />} />
                   <Route path="/product" element={<Product />} />
                   <Route path="/customer" element={<Customer />} />
                   <Route path="/system-users" element={<SystemUsers />} />
@@ -101,6 +105,7 @@ const App = () => {
         </Modal>
       </Router>
     </ChakraProvider>
+    </div>
   );
 };
 

@@ -1,4 +1,3 @@
-// src/components/InvoiceForm.tsx
 import React, { useState, useEffect } from "react";
 import {
   Box,
@@ -10,6 +9,7 @@ import {
   VStack,
   HStack,
   Heading,
+  Select,
 } from "@chakra-ui/react";
 
 interface InvoiceFormProps {
@@ -63,7 +63,7 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({
   }, [invoice]);
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
     index?: number
   ) => {
     const { name, value } = e.target;
@@ -218,6 +218,18 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({
             value={formState.totalAmount.toFixed(2)}
             readOnly
           />
+        </FormControl>
+        <FormControl isRequired>
+          <FormLabel>Status</FormLabel>
+          <Select
+            name="status"
+            value={formState.status}
+            onChange={handleChange}
+          >
+            <option value="unpaid">Unpaid</option>
+            <option value="paid">Paid</option>
+            <option value="overdue">Overdue</option>
+          </Select>
         </FormControl>
         {onCancelEdit && (
           <Button
