@@ -1,16 +1,15 @@
-// src/components/Navbar.tsx
-
-import React from 'react';
-import { FaSun, FaMoon } from 'react-icons/fa';
-import logo from '../assets/Logos.png'; // Make sure to replace this with the actual path to your logo image
-import '../styles/styles.css';
+import React from "react";
+import { FaSun, FaMoon } from "react-icons/fa";
+import logo from "../assets/Logos.png"; // Make sure to replace this with the actual path to your logo image
+import "../styles/styles.css";
 
 interface NavbarProps {
   toggleTheme: () => void;
   darkMode: boolean;
+  onLogout: () => void; // Add onLogout prop
 }
 
-const Navbar: React.FC<NavbarProps> = ({ toggleTheme, darkMode }) => {
+const Navbar: React.FC<NavbarProps> = ({ toggleTheme, darkMode, onLogout }) => {
   return (
     <nav className="navbar">
       <div className="navbar-logo">
@@ -25,9 +24,9 @@ const Navbar: React.FC<NavbarProps> = ({ toggleTheme, darkMode }) => {
             <FaMoon className="toggle-icon" />
           )}
         </div>
-        <a href="/login" className="login-link">
-          Login
-        </a>
+        <button className="logout-button" onClick={onLogout}>
+          Logout
+        </button>
       </div>
     </nav>
   );

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ChakraProvider, useDisclosure, Box, Button } from "@chakra-ui/react";
 import Sidebar from "./components/Sidebar";
@@ -10,9 +10,9 @@ import SystemUsers from "./components/SystemUsers";
 import LoginForm from "./components/LoginForm";
 import SignUpForm from "./components/SignUpForm";
 import "./styles/styles.css";
-import "./App.css"
-// import InvoiceForm from "./components/InvoiceForm";
+import "./App.css";
 import InvoicePage from "./pages/InvoicePage";
+import SendInvoice from "./components/SendInvoice";
 import {
   Modal,
   ModalOverlay,
@@ -22,7 +22,6 @@ import {
   ModalBody,
   ModalCloseButton,
 } from "@chakra-ui/react";
-import SendInvoice from "./components/SendInvoice";
 
 const App = () => {
   const [darkMode, setDarkMode] = useState(false);
@@ -38,73 +37,92 @@ const App = () => {
     onClose: onSignUpClose,
   } = useDisclosure();
 
+  useEffect(() => {
+    // Check localStorage for authentication token
+    const token = localStorage.getItem("authToken");
+    if (token) {
+      setIsAuthenticated(true);
+    }
+  }, []);
+
   const toggleTheme = () => {
     setDarkMode(!darkMode);
     document.body.classList.toggle("dark-theme", !darkMode);
   };
 
   const handleLogin = (token) => {
+    localStorage.setItem("authToken", token);
     setIsAuthenticated(true);
     onLoginClose();
   };
 
   const handleSignUp = (token) => {
+    localStorage.setItem("authToken", token);
     setIsAuthenticated(true);
     onSignUpClose();
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("authToken");
+    setIsAuthenticated(false);
   };
 
   return (
     <div className="container">
       <ChakraProvider>
-      <Router>
-        <div className={darkMode ? "dark-theme" : ""}>
-          {isAuthenticated ? (
-            <>
-              <Navbar toggleTheme={toggleTheme} darkMode={darkMode} />
-              <Sidebar />
-              <div className="content">
-                <Routes>
-                  <Route path="/dashboard" element={<Dashboard />} />
-                  <Route path="/invoice" element={<InvoicePage />} />
-                  <Route path="/invoicepage" element={<InvoicePage />} />
-                  <Route path="send-invoice" element={<SendInvoice />} />
-                  <Route path="/product" element={<Product />} />
-                  <Route path="/customer" element={<Customer />} />
-                  <Route path="/system-users" element={<SystemUsers />} />
-                  <Route path="/" element={<Dashboard />} />
-                </Routes>
-              </div>
-            </>
-          ) : (
-            <Box textAlign="center" mt={10}>
-              <Button onClick={onLoginOpen}>Login</Button>
-            </Box>
-          )}
-        </div>
+        <Router>
+          <div className={darkMode ? "dark-theme" : ""}>
+            {isAuthenticated ? (
+              <>
+                <Navbar
+                  toggleTheme={toggleTheme}
+                  darkMode={darkMode}
+                  onLogout={handleLogout}
+                />
+                <Sidebar />
+                <div className="content">
+                  <Routes>
+                    <Route path="/dashboard" element={<Dashboard />} />
+                    <Route path="/invoice" element={<InvoicePage />} />
+                    <Route path="/invoicepage" element={<InvoicePage />} />
+                    <Route path="send-invoice" element={<SendInvoice />} />
+                    <Route path="/product" element={<Product />} />
+                    <Route path="/customer" element={<Customer />} />
+                    <Route path="/system-users" element={<SystemUsers />} />
+                    <Route path="/" element={<Dashboard />} />
+                  </Routes>
+                </div>
+              </>
+            ) : (
+              <Box textAlign="center" mt={10}>
+                <Button onClick={onLoginOpen}>Login</Button>
+              </Box>
+            )}
+          </div>
 
-        <Modal isOpen={isLoginOpen} onClose={onLoginClose}>
-          <ModalOverlay />
-          <ModalContent>
-            <ModalHeader>Login</ModalHeader>
-            <ModalCloseButton />
-            <ModalBody>
-              <LoginForm onLogin={handleLogin} onOpenSignUp={onSignUpOpen} />
-            </ModalBody>
-          </ModalContent>
-        </Modal>
+          <Modal isOpen={isLoginOpen} onClose={onLoginClose}>
+            <ModalOverlay />
+            <ModalContent>
+              <ModalHeader>Login</ModalHeader>
+              <ModalCloseButton />
+              <ModalBody>
+                <LoginForm onLogin={handleLogin} onOpenSignUp={onSignUpOpen} />
+              </ModalBody>
+            </ModalContent>
+          </Modal>
 
-        <Modal isOpen={isSignUpOpen} onClose={onSignUpClose}>
-          <ModalOverlay />
-          <ModalContent>
-            <ModalHeader>Sign Up</ModalHeader>
-            <ModalCloseButton />
-            <ModalBody>
-              <SignUpForm onSignUp={handleSignUp} />
-            </ModalBody>
-          </ModalContent>
-        </Modal>
-      </Router>
-    </ChakraProvider>
+          <Modal isOpen={isSignUpOpen} onClose={onSignUpClose}>
+            <ModalOverlay />
+            <ModalContent>
+              <ModalHeader>Sign Up</ModalHeader>
+              <ModalCloseButton />
+              <ModalBody>
+                <SignUpForm onSignUp={handleSignUp} />
+              </ModalBody>
+            </ModalContent>
+          </Modal>
+        </Router>
+      </ChakraProvider>
     </div>
   );
 };
