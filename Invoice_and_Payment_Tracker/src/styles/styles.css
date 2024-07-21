@@ -22,6 +22,11 @@ body.dark-theme {
   --chakra-colors-gray-800: #2d3748;
   --chakra-colors-blue-500: #4299e1;
   --chakra-colors-blue-600: #3182ce;
+  --icon-color: #fff;
+  --icon-hover-color: #ffc107; /* Gold color for hover state */
+  --button-bg: #4299e1;
+  --button-text: #fff;
+  --button-hover-bg: #3182ce;
 }
 
 body,
@@ -71,6 +76,27 @@ html {
 
 .toggle-icon {
   font-size: 1.5rem;
+  color: var(--icon-color);
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.theme-toggle:hover .toggle-icon {
+  transform: rotate(20deg);
+  color: var(--icon-hover-color);
+}
+
+.logout-button {
+  padding: 0.5rem 1rem;
+  background-color: var(--button-bg);
+  color: var(--button-text);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.logout-button:hover {
+  background-color: var(--button-hover-bg);
 }
 
 .login-link {

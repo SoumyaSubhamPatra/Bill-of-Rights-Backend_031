@@ -1,12 +1,12 @@
 import React from "react";
 import { FaSun, FaMoon } from "react-icons/fa";
-import logo from "../assets/Logos.png"; // Make sure to replace this with the actual path to your logo image
+import logo from "../assets/Logos.png";
 import "../styles/styles.css";
 
 interface NavbarProps {
   toggleTheme: () => void;
   darkMode: boolean;
-  onLogout: () => void; // Add onLogout prop
+  onLogout: () => void;
 }
 
 const Navbar: React.FC<NavbarProps> = ({ toggleTheme, darkMode, onLogout }) => {
