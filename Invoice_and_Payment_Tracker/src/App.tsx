@@ -18,10 +18,12 @@ import {
   ModalOverlay,
   ModalContent,
   ModalHeader,
-  ModalFooter,
   ModalBody,
   ModalCloseButton,
+  Image,
+  Text,
 } from "@chakra-ui/react";
+import logo from "./assets/Logos.png"; // Make sure the path to your logo is correct
 
 const App = () => {
   const [darkMode, setDarkMode] = useState(false);
@@ -100,21 +102,47 @@ const App = () => {
             )}
           </div>
 
-          <Modal isOpen={isLoginOpen} onClose={onLoginClose}>
+          <Modal isOpen={isLoginOpen} onClose={onLoginClose} isCentered>
             <ModalOverlay />
             <ModalContent>
-              <ModalHeader>Login</ModalHeader>
+              <ModalHeader>
+                <Box display="flex" alignItems="center">
+                  <Image
+                    src={logo}
+                    alt="Payment Tracker Logo"
+                    boxSize="40px"
+                    mr={2}
+                  />
+                  <Text fontSize="xl">Payment Tracker</Text>
+                </Box>
+              </ModalHeader>
               <ModalCloseButton />
               <ModalBody>
-                <LoginForm onLogin={handleLogin} onOpenSignUp={onSignUpOpen} />
+                <LoginForm
+                  onLogin={handleLogin}
+                  onOpenSignUp={() => {
+                    onSignUpOpen();
+                    onLoginClose();
+                  }}
+                />
               </ModalBody>
             </ModalContent>
           </Modal>
 
-          <Modal isOpen={isSignUpOpen} onClose={onSignUpClose}>
+          <Modal isOpen={isSignUpOpen} onClose={onSignUpClose} isCentered>
             <ModalOverlay />
             <ModalContent>
-              <ModalHeader>Sign Up</ModalHeader>
+              <ModalHeader>
+                <Box display="flex" alignItems="center">
+                  <Image
+                    src={logo}
+                    alt="Payment Tracker Logo"
+                    boxSize="40px"
+                    mr={2}
+                  />
+                  <Text fontSize="xl">Payment Tracker</Text>
+                </Box>
+              </ModalHeader>
               <ModalCloseButton />
               <ModalBody>
                 <SignUpForm onSignUp={handleSignUp} />
