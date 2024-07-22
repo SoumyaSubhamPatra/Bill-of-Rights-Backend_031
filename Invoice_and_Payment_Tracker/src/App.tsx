@@ -31,8 +31,9 @@ import "./styles/styles.css";
 import "./App.css";
 import InvoicePage from "./pages/InvoicePage";
 import SendInvoice from "./components/SendInvoice";
-import StripePayment from './components/StripePayment'; // Add StripePayment import
+import StripePayment from "./components/StripePayment"; // Add StripePayment import
 import logo from "./assets/Logos.png"; // Ensure the path to your logo is correct
+import { signUpUser } from "./api"; // Update the import path
 
 const AppContent = () => {
   const [darkMode, setDarkMode] = useState(false);
@@ -53,6 +54,7 @@ const AppContent = () => {
   useEffect(() => {
     // Check localStorage for authentication token
     const token = localStorage.getItem("authToken");
+    console.log("Checking localStorage for authToken:", token);
     if (token) {
       setIsAuthenticated(true);
     } else {
@@ -63,6 +65,7 @@ const AppContent = () => {
   useEffect(() => {
     // Redirect to login page if not authenticated
     if (!isAuthenticated) {
+      console.log("User is not authenticated, opening login modal");
       onLoginOpen(); // Ensure login modal is open if not authenticated
     }
   }, [isAuthenticated, onLoginOpen]);
@@ -73,20 +76,34 @@ const AppContent = () => {
   };
 
   const handleLogin = (token: string) => {
+    console.log("Setting authToken in localStorage:", token);
     localStorage.setItem("authToken", token);
     setIsAuthenticated(true);
     onLoginClose();
     navigate("/dashboard"); // Redirect to dashboard or another protected route
   };
 
-  const handleSignUp = (token: string) => {
-    localStorage.setItem("authToken", token);
-    setIsAuthenticated(true);
-    onSignUpClose();
-    navigate("/dashboard"); // Redirect to dashboard or another protected route
+  const handleSignUp = async (
+    username: string,
+    password: string,
+    role: string
+  ) => {
+    try {
+      console.log("Attempting to sign up:", username, role);
+      const response = await signUpUser(username, password, role);
+      console.log("Sign up successful, token:", response.token);
+      localStorage.setItem("authToken", response.token);
+      setIsAuthenticated(true);
+      onSignUpClose();
+      navigate("/dashboard"); // Redirect to dashboard or another protected route
+    } catch (error) {
+      console.error("Sign up error:", error);
+      // Handle sign up error (e.g., show a toast notification)
+    }
   };
 
   const handleLogout = () => {
+    console.log("Removing authToken from localStorage");
     localStorage.removeItem("authToken");
     setIsAuthenticated(false);
     onLoginOpen(); // Open the login modal after logging out
@@ -95,12 +112,12 @@ const AppContent = () => {
 
   const handlePaymentSuccess = (paymentIntent: any) => {
     // Handle payment success (e.g., update payment status in the database)
-    console.log('Payment successful:', paymentIntent);
+    console.log("Payment successful:", paymentIntent);
   };
 
   const handlePaymentError = (error: any) => {
     // Handle payment error
-    console.error('Payment error:', error);
+    console.error("Payment error:", error);
   };
 
   return (
@@ -122,9 +139,18 @@ const AppContent = () => {
               <Route path="/product" element={<Product />} />
               <Route path="/customer" element={<Customer />} />
               <Route path="/system-users" element={<SystemUsers />} />
-              <Route path="/" element={<Dashboard />} />{" "}
               {/* Redirect to Dashboard or another route */}
-              <Route path="/pay-invoice" element={<StripePayment amount={100} onSuccess={handlePaymentSuccess} onError={handlePaymentError} />} /> {/* Add Stripe payment route */}
+              <Route
+                path="/pay-invoice"
+                element={
+                  <StripePayment
+                    amount={100}
+                    onSuccess={handlePaymentSuccess}
+                    onError={handlePaymentError}
+                  />
+                }
+              />{" "}
+              {/* Add Stripe payment route */}
             </Routes>
           </div>
         </>

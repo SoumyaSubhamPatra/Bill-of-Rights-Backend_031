@@ -1,4 +1,3 @@
-// src/components/LoginForm.tsx
 import React, { useState } from "react";
 import {
   VStack,
@@ -15,7 +14,7 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { loginUser } from '../features/signup/SignUp';  // Ensure correct import
+import { loginUser } from "../api"; // Update the import path
 
 const LoginForm = ({ onLogin, onOpenSignUp }) => {
   const [username, setUsername] = useState("");
@@ -25,7 +24,9 @@ const LoginForm = ({ onLogin, onOpenSignUp }) => {
 
   const handleLogin = async () => {
     try {
+      console.log("Attempting to log in:", username, password);
       const response = await loginUser(username, password);
+      console.log("Login successful, token:", response.token);
       onLogin(response.token);
       toast({
         title: "Login successful.",
@@ -35,6 +36,7 @@ const LoginForm = ({ onLogin, onOpenSignUp }) => {
         isClosable: true,
       });
     } catch (error) {
+      console.error("Login error:", error);
       toast({
         title: "Error.",
         description: error.message,
