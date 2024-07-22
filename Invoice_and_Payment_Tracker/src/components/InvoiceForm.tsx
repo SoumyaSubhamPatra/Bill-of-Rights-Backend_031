@@ -73,6 +73,9 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({
         ...items[index],
         [name]: name === "description" ? value : Number(value),
       };
+      if (name === "quantity" || name === "price") {
+        items[index].tax = items[index].quantity * items[index].price * 0.18;
+      }
       setFormState({ ...formState, items });
     } else {
       setFormState({ ...formState, [name]: value });
@@ -189,13 +192,13 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({
                     onChange={(e) => handleChange(e, index)}
                   />
                 </FormControl>
-                <FormControl isRequired>
+                <FormControl>
                   <FormLabel>Tax</FormLabel>
                   <Input
                     type="number"
                     name="tax"
-                    value={item.tax}
-                    onChange={(e) => handleChange(e, index)}
+                    value={item.tax.toFixed(2)}
+                    readOnly
                   />
                 </FormControl>
               </HStack>
