@@ -1,3 +1,4 @@
+// src/components/SignUpForm.tsx
 import React, { useState } from "react";
 import {
   VStack,
@@ -12,30 +13,21 @@ import {
   useToast,
   Box,
   useColorModeValue,
+  Select,
 } from "@chakra-ui/react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-
-const mockClarkSignUp = async (email, password) => {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      if (email && password) {
-        resolve({ token: "fake-jwt-token" });
-      } else {
-        reject(new Error("Email and password are required"));
-      }
-    }, 1000);
-  });
-};
+import { signUpUser } from '../features/signup/SignUp';
 
 const SignUpForm = ({ onSignUp }) => {
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [role, setRole] = useState("User"); // Default role
   const [showPassword, setShowPassword] = useState(false);
   const toast = useToast();
 
   const handleSignUp = async () => {
     try {
-      const response = await mockClarkSignUp(email, password);
+      const response = await signUpUser(username, password, role);
       onSignUp(response.token);
       toast({
         title: "Sign up successful.",
@@ -81,12 +73,11 @@ const SignUpForm = ({ onSignUp }) => {
           <Heading as="h2" size="lg">
             Sign Up
           </Heading>
-          <FormControl id="email">
-            <FormLabel>Email address</FormLabel>
+          <FormControl id="username">
+            <FormLabel>Username</FormLabel>
             <Input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
             />
           </FormControl>
           <FormControl id="password">
@@ -106,6 +97,13 @@ const SignUpForm = ({ onSignUp }) => {
                 />
               </InputRightElement>
             </InputGroup>
+          </FormControl>
+          <FormControl id="role">
+            <FormLabel>Role</FormLabel>
+            <Select value={role} onChange={(e) => setRole(e.target.value)}>
+              <option value="User">User</option>
+              <option value="Admin">Admin</option>
+            </Select>
           </FormControl>
           <Button colorScheme="blue" onClick={handleSignUp} width="full">
             Sign Up

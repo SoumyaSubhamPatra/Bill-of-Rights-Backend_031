@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from '../store/index'; // Adjust the path according to your project structure
 import '../styles/dashboard.css'; // Adjust the path according to your project structure
+import StripePayment from './StripePayment'; // Adjust the path accordingly
 
 const Dashboard: React.FC = () => {
   const invoices = useSelector((state: RootState) => state.invoices.invoices);
@@ -51,6 +52,16 @@ const Dashboard: React.FC = () => {
     }
   }, [customers]);
 
+  const handlePaymentSuccess = (paymentIntent: any) => {
+    // Handle payment success (e.g., update payment status in the database)
+    console.log('Payment successful:', paymentIntent);
+  };
+
+  const handlePaymentError = (error: any) => {
+    // Handle payment error
+    console.error('Payment error:', error);
+  };
+
   return (
     <div className="dashboard">
       <div className="dashboard-cards">
@@ -77,6 +88,11 @@ const Dashboard: React.FC = () => {
         <div className="card">
           <h3>Customer Count</h3>
           <p>{customerCount}</p>
+        </div>
+        {/* Stripe Payment Integration */}
+        <div className="card">
+          <h3>Pay Invoice</h3>
+          <StripePayment amount={100} onSuccess={handlePaymentSuccess} onError={handlePaymentError} />
         </div>
       </div>
     </div>

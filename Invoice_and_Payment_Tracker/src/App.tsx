@@ -31,6 +31,7 @@ import "./styles/styles.css";
 import "./App.css";
 import InvoicePage from "./pages/InvoicePage";
 import SendInvoice from "./components/SendInvoice";
+import StripePayment from './components/StripePayment'; // Add StripePayment import
 import logo from "./assets/Logos.png"; // Ensure the path to your logo is correct
 
 const AppContent = () => {
@@ -71,14 +72,14 @@ const AppContent = () => {
     document.body.classList.toggle("dark-theme", !darkMode);
   };
 
-  const handleLogin = (token) => {
+  const handleLogin = (token: string) => {
     localStorage.setItem("authToken", token);
     setIsAuthenticated(true);
     onLoginClose();
     navigate("/dashboard"); // Redirect to dashboard or another protected route
   };
 
-  const handleSignUp = (token) => {
+  const handleSignUp = (token: string) => {
     localStorage.setItem("authToken", token);
     setIsAuthenticated(true);
     onSignUpClose();
@@ -90,6 +91,16 @@ const AppContent = () => {
     setIsAuthenticated(false);
     onLoginOpen(); // Open the login modal after logging out
     navigate("/"); // Redirect to login page
+  };
+
+  const handlePaymentSuccess = (paymentIntent: any) => {
+    // Handle payment success (e.g., update payment status in the database)
+    console.log('Payment successful:', paymentIntent);
+  };
+
+  const handlePaymentError = (error: any) => {
+    // Handle payment error
+    console.error('Payment error:', error);
   };
 
   return (
@@ -113,6 +124,7 @@ const AppContent = () => {
               <Route path="/system-users" element={<SystemUsers />} />
               <Route path="/" element={<Dashboard />} />{" "}
               {/* Redirect to Dashboard or another route */}
+              <Route path="/pay-invoice" element={<StripePayment amount={100} onSuccess={handlePaymentSuccess} onError={handlePaymentError} />} /> {/* Add Stripe payment route */}
             </Routes>
           </div>
         </>

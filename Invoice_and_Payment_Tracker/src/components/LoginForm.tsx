@@ -1,3 +1,4 @@
+// src/components/LoginForm.tsx
 import React, { useState } from "react";
 import {
   VStack,
@@ -14,28 +15,17 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-
-const mockClarkSignIn = async (email, password) => {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      if (email === "user@example.com" && password === "password") {
-        resolve({ token: "fake-jwt-token" });
-      } else {
-        reject(new Error("Invalid email or password"));
-      }
-    }, 1000);
-  });
-};
+import { loginUser } from '../features/signup/SignUp';  // Ensure correct import
 
 const LoginForm = ({ onLogin, onOpenSignUp }) => {
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const toast = useToast();
 
   const handleLogin = async () => {
     try {
-      const response = await mockClarkSignIn(email, password);
+      const response = await loginUser(username, password);
       onLogin(response.token);
       toast({
         title: "Login successful.",
@@ -81,12 +71,11 @@ const LoginForm = ({ onLogin, onOpenSignUp }) => {
           <Heading as="h2" size="lg">
             Login
           </Heading>
-          <FormControl id="email">
-            <FormLabel>Email address</FormLabel>
+          <FormControl id="username">
+            <FormLabel>Username</FormLabel>
             <Input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
             />
           </FormControl>
           <FormControl id="password">
